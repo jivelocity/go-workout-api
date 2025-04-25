@@ -95,7 +95,7 @@ func (pg *PostgresWorkoutStore) GetWorkoutByID(id int64) (*Workout, error) {
 	// lets get the entries
 
 	entryQuery := `
-		SELECT id, exercise_name, sets. reps, duration_seconds, weight, notes, order_index
+		SELECT id, exercise_name, sets, reps, duration_seconds, weight, notes, order_index
 		FROM workout_entries
 		WHERE workout_id = $1
 		ORDER BY order_index
