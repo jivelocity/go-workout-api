@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/jivelocity/femGo/internal/api"
+	"github.com/jivelocity/femGo/internal/middleware"
 	"github.com/jivelocity/femGo/internal/store"
 	"github.com/jivelocity/femGo/migrations"
 )
@@ -17,6 +18,7 @@ type Application struct {
 	WorkoutHandler *api.WorkoutHandler
 	UserHandler    *api.UserHandler
 	TokenHandler   *api.TokenHandler
+	Middleware     middleware.UserMiddleware
 	DB             *sql.DB
 }
 
@@ -42,12 +44,14 @@ func NewApplication() (*Application, error) {
 	workoutHandler := api.NewWorkoutHandler(workoutStore, logger)
 	userHandler := api.NewUserHandler(userStore, logger)
 	tokenHandler := api.NewTokenHandler(tokenStore, userStore, logger)
+	middleareHandler := middleware.UserMiddleware{UserStore: userStore}
 
 	app := &Application{
 		Logger:         logger,
 		WorkoutHandler: workoutHandler,
 		UserHandler:    userHandler,
 		TokenHandler:   tokenHandler,
+		Middleware:     middleareHandler,
 		DB:             pgDB,
 	}
 
